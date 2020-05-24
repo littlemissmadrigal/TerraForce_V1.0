@@ -29,19 +29,18 @@ def main():
     color_clothes = 'grey'
 
     # Intro
-    play_intro()
+
 
     # Gets typing speed for game from user input
     WRITE_SPEED = set_text_speed()
 
     # Scene 1 - scene-setting
-    play_scene_1()
 
     # Scene 2 - if vegan, acquires gold bracelet
-    play_scene_2()
+
 
     # Scene 3 - gains item from desk for inventory
-    play_scene_3()
+
 
     # Scene 4 - very short interlude where you choose to turn left or right out of your room - determines next scene...
     x = play_scene_4()
@@ -402,7 +401,7 @@ def fight(endpoint, enemy):
             "(You " + your_attack_choice + " the " + enemy + " incredibly hard. They recoil with pain and shock.",
             "(You stealthily shift your centre of balance and " + your_attack_choice + " with all your strength. They howl out in pain."]
         miss_you_attacks = "(You try to " + your_attack_choice + " the " + enemy + " and miss.)"
-        shield_yourself = ["(You raise huddle up into a ball, trying to protect yourself)",
+        shield_yourself = ["(You raise your arms and huddle up into a ball, trying to protect yourself)",
                            "(You shield your face with your hands, trying to lessen the " + enemy + "'s blow)"]
 
         # Choosing which appropriate prompt to print
@@ -431,6 +430,8 @@ def fight(endpoint, enemy):
             # Enemy chooses attack & attack value (subtracts from player HP)
             enemy_attack_choice = random.choice(enemy_attack_list)
             enemy_attack_value = random.choice(enemy_attacks[enemy_attack_choice])
+            if your_attack_choice == 'shield':
+                enemy_attack_value -= 1
             your_hp -= enemy_attack_value
 
             # Enemy attack prompts
@@ -440,15 +441,14 @@ def fight(endpoint, enemy):
                 "/(The " + enemy + " swings wildly and hits you with a " + enemy_attack_choice + ".",
                 "/(You barely have time to blink before the " + enemy + " retaliates angrily."]
             max_enemy_attacks = ["/(The " + enemy + " hits you dead in the groin. You scream with agony.",
-                                 "/(Before you can move out of the way, the " + enemy + " smashes you hard to the skull. You yell out in pain."]
+                                 "/(Before you can move out of the way, the " + enemy + " smashes you hard to the skull./You yell out in pain."]
             miss_enemy_attacks = "/(The " + enemy + " swings to hit you, and misses.)"
-            hit_enemy_shield = "/(The " + enemy + " strikes at you. Your shield yourself from some of the injury, but not all of it."
+            hit_enemy_shield = "/(The " + enemy + " strikes at you. You shield yourself from some of the injury, but not/all of it."
             miss_enemy_shield = "/(The " + enemy + " swings at you, but you block their " + enemy_attack_choice + " successfully)."
 
             # Choosing which appropriate prompt to print
             if your_attack_choice == 'shield':
-                enemy_attack_value -= 1
-                if enemy_attack_value == 0:
+                if enemy_attack_value < 1:
                     print_from_string(miss_enemy_shield)
                 else:
                     print_from_string(hit_enemy_shield)
@@ -477,12 +477,10 @@ def fight(endpoint, enemy):
     if int(enemy_hp) < int(endpoint) + 1:
         pygame.mixer.music.fadeout(3000)
         time.sleep(3)
-        print("\n")
         return True
     else:
         pygame.mixer.music.fadeout(3000)
         time.sleep(3)
-        print("\n")
         return False
 
 # Asks for player's name and returns value
